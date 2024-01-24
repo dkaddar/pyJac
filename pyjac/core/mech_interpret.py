@@ -1085,7 +1085,7 @@ def read_mech_ct(filename=None, gas=None):
                                  )
             reac.plog = True
             reac.plog_par = []
-            for rate in rxn.rates:
+            for rate in rxn.rate.rates:
                 pars = [rate[0], rate[1].pre_exponential_factor,
                         rate[1].temperature_exponent,
                         rate[1].activation_energy * E_fac
