@@ -975,17 +975,17 @@ def read_mech_ct(filename=None, gas=None):
         """
 
         # See if single species acts as third body
-        if rxn.default_efficiency == 0.0 \
-                and len(ct_rxn.efficiencies.keys()) == 1\
-                and list(ct_rxn.efficiencies.values())[0] == 1\
+        if rxn.third_body.default_efficiency == 0.0 \
+                and len(ct_rxn.third_body.efficiencies.keys()) == 1\
+                and list(ct_rxn.third_body.efficiencies.values())[0] == 1\
                 and reac.pdep:
-            reac.pdep_sp = list(rxn.efficiencies.keys())[0]
+            reac.pdep_sp = list(rxn.third_body.efficiencies.keys())[0]
         else:
             for sp in gas.species_names:
-                if sp in ct_rxn.efficiencies:
-                    reac.thd_body_eff.append([sp, ct_rxn.efficiencies[sp]])
-                elif ct_rxn.default_efficiency != 1.0:
-                    reac.thd_body_eff.append([sp, ct_rxn.default_efficiency])
+                if sp in ct_rxn.third_body.efficiencies:
+                    reac.thd_body_eff.append([sp, ct_rxn.third_body.efficiencies[sp]])
+                elif ct_rxn.third_body.default_efficiency != 1.0:
+                    reac.thd_body_eff.append([sp, ct_rxn.third_body.default_efficiency])
         return reac
 
     for rxn in gas.reactions():
