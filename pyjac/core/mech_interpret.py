@@ -1074,7 +1074,29 @@ def read_mech_ct(filename=None, gas=None):
             elif rxn.reaction_type == 'falloff-SRI':
                 reac.sri = True
                 reac.sri_par = rxn.rate.falloff_coeffs.tolist()
-        
+
+        elif rxn.reaction_type == 'three-body-pressure-dependent-Arrhenius':
+            # Instantiate internal reaction based on Cantera Reaction data.
+            reac = chem.ReacInfo(rxn.reversible,
+                                 list(rxn.reactants.keys()),
+                                 list(rxn.reactants.values()),
+                                 list(rxn.products.keys()),
+                                 list(rxn.products.values()),
+                                 0.0, 0.0, 0.0
+                                 )
+            reac.plog = True
+            reac.plog_par = []
+            for rate in rxn.rate.rates:
+                pars = [rate[0], rate[1].pre_exponential_factor,
+                        rate[1].temperature_exponent,
+                        rate[1].activation_energy * E_fac
+                        ]
+                reac.plog_par.append(pars)
+
+            reac.thd_body = True
+            reac = handle_effiencies(reac, rxn)
+
+
         elif rxn.reaction_type == 'pressure-dependent-Arrhenius':
             reac = chem.ReacInfo(rxn.reversible,
                                  list(rxn.reactants.keys()),
@@ -1091,6 +1113,7 @@ def read_mech_ct(filename=None, gas=None):
                         rate[1].activation_energy * E_fac
                         ]
                 reac.plog_par.append(pars)
+
 
         elif rxn.reaction_type == 'Chebyshev':
             reac = chem.ReacInfo(rxn.reversible,
@@ -1125,7 +1148,7 @@ def read_mech_ct(filename=None, gas=None):
                                  )
 
         else:
-            print('Error: unsupported reaction.')
+            print(f"Error: unsupported reaction: {rxn.reaction_type}")
             sys.exit(1)
 
         reac.dup = rxn.duplicate
