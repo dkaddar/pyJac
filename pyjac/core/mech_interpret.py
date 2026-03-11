@@ -94,7 +94,7 @@ def read_mech(mech_filename, therm_filename):
             if not line: break
 
             # skip blank or commented lines
-            if re.search('^\s*$', line) or re.search('^\s*!', line): continue
+            if re.search(r'^\s*$', line) or re.search(r'^\s*!', line): continue
 
             # don't convert to lowercase, since thermo
             # needs to match (for Chemkin)
@@ -246,10 +246,10 @@ def read_mech(mech_filename, therm_filename):
                         # (e.g., '(+)').
                         # If not, part of species name.
                         inParen = sub_str[ind1 + 1: ind2].strip()
-                        if inParen is '+':
+                        if inParen == '+':
                             # '+' embedded within parentheses
                             sub_str = sub_str[ind2 + 1:]
-                        elif inParen[0] is '+':
+                        elif inParen[0] == '+':
                             pdep = True
 
                             # either 'm' or a specific species
@@ -288,7 +288,7 @@ def read_mech(mech_filename, therm_filename):
                         # ensure not last entry
                         if (ind < len(reac_list) - 1):
                             spNext = reac_list[ind + 1]
-                            if sp[len(sp) - 1] is '(' and spNext[0] is ')':
+                            if sp[len(sp) - 1] == '(' and spNext[0] == ')':
                                 reac_list[ind] = sp + '+' + spNext
                                 del reac_list[ind + 1]
 
@@ -344,10 +344,10 @@ def read_mech(mech_filename, therm_filename):
                         # parentheses and not embedded within parentheses
                         # (e.g., '(+)'). If not, part of species name.
                         inParen = sub_str[ind1 + 1: ind2].strip()
-                        if inParen is '+':
+                        if inParen == '+':
                             # '+' embedded within parentheses
                             sub_str = sub_str[ind2 + 1:]
-                        elif inParen[0] is '+':
+                        elif inParen[0] == '+':
                             pdep = True
 
                             # either 'm' or a specific species
@@ -386,7 +386,7 @@ def read_mech(mech_filename, therm_filename):
                         # ensure not last entry
                         if (ind < len(prod_list) - 1):
                             spNext = prod_list[ind + 1]
-                            if sp[len(sp) - 1] is '(' and spNext[0] is ')':
+                            if sp[len(sp) - 1] == '(' and spNext[0] == ')':
                                 prod_list[ind] = sp + '+' + spNext
                                 del prod_list[ind + 1]
 
@@ -761,7 +761,7 @@ def read_thermo(filename, elems, specs):
             line = file.readline()
 
             # skip blank or commented lines
-            if re.search('^\s*$', line) or re.search('^\s*!', line): continue
+            if re.search(r'^\s*$', line) or re.search(r'^\s*!', line): continue
 
             # skip 'thermo' at beginning
             if 'thermo' in line.lower(): break
@@ -789,7 +789,7 @@ def read_thermo(filename, elems, specs):
             if line is None or line[0:3].lower() == 'end': break
 
             # skip blank/commented line
-            if re.search('^\s*$', line) or re.search('^\s*!', line): continue
+            if re.search(r'^\s*$', line) or re.search(r'^\s*!', line): continue
 
             # species name, columns 0:18
             spec = line[0:18].strip()
